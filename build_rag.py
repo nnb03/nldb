@@ -1,25 +1,12 @@
 import chromadb
-from chromadb.utils.embedding_functions import EmbeddingFunction
-import ollama
 from db import get_connection
 
-
-class OllamaEmbeddingFunction(EmbeddingFunction):
-    def __init__(self, model="hf.co/CompendiumLabs/bge-base-en-v1.5-gguf:latest"):
-        self.model = model
-
-    def __call__(self, input):
-        return [
-            ollama.embeddings(model=self.model, prompt=text)["embedding"]
-            for text in input
-        ]
-
-
-client = chromadb.PersistentClient(path="./rag_db")
+client = chromadb.PersistentClient(
+    path="./rag_db"
+)
 
 collection = client.get_or_create_collection(
-    "schema",
-    embedding_function=OllamaEmbeddingFunction()
+    "schema"
 )
 
 
